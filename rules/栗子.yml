@@ -1,0 +1,14 @@
+rules:
+- family: 大类归属
+  name: "大类名"
+  poc:
+  - iscase: 是否区分大小写，默认不区分（true，false）
+    isfall: 是否失陷（true，false）
+    issuccess: 本次攻击是否成功（true，false）
+    ismatchua: 是否匹配user-agent（sql注入xss等攻击点可以user-agent，而其他什么目录扫描之类的不会）。
+    matching: 匹配方式（regex，contains）
+    method: 请求方式（GET，POST，PUT...），如果填写该字段，该字段则与rule字段与运算组合判断。
+    name: 规则匹配到的小类名
+    rule: 规则，是一个数组
+    status_code: 状态码，是一个数组
+    ua: 请求的user-agent头，只支持正则、忽略大小写，如果填写该字段，该字段则与rule字段与运算组合判断。

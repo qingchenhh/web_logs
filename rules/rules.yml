@@ -1,0 +1,437 @@
+rules:
+- family: sql_injection
+  name: "SQL注入"
+  poc:
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: true
+    matching: regex
+    method: ''
+    name: "SQL注入攻击"
+    rule:
+    # - order.*by.*
+    - information_schema\.
+    - floor.*\(.*rand\(\).*\)
+    - updatexml\(.*,.*,\)
+    - union.*select
+    - extractvalue\(.*,.*,.*\)
+    - ascii\(.*\)
+    - database\(\)
+    - user\(\)
+    - version\(\)
+    - "@@version"
+    - db_name\(\)
+    - execute\(.*\)
+    - master\.\.xp_cmdshell
+    - xp_cmdshell.*
+    - from.*sys\.databases
+    - '%df%27'
+    - "%df%5c%27"
+    - waitfor.*delay
+    - \'.*and\.*--.*'
+    - \'.*or\.*--.*'
+    - \'.*and\.*#.*'
+    - \'.*or\.*#.*'
+    - select.*from
+    status_code: []
+    ua: ''
+
+- family: xss
+  name: "XSS"
+  poc:
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: true
+    matching: regex
+    method: ''
+    name: "XSS漏洞攻击"
+    rule:
+    - "<ScRiPt>.*</sCrIpT>"
+    - "%3CScRiPt%3E.*%3C/sCrIpT%3E"
+    - "%3CScRiPt%3E.*%3C%2FsCrIpT%3E"
+    - "%253CScRiPt%253E%2E%2A%253C%252FsCrIpT%253E"
+    - =onclick.*
+    - =onerror.*
+    - document\.cookie
+    - "<img.*"
+    - "<img%20.*"
+    - prompt\(.*\)
+    - javascript:.*
+    status_code: []
+    ua: ''
+
+- family: include_file
+  name: "文件包含/文件读取/目录穿越"
+  poc:
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: false
+    matching: regex
+    method: ''
+    name: "文件读取"
+    rule:
+    - c:\\
+    - .*\.\./etc/passwd
+    - WEB-INF/web.xml
+    - /system\.ini
+    - /win\.ini
+    - /etc/hosts
+    - \\system\.ini
+    - \\win\.ini
+    - \\etc\\hosts
+    - \.\./
+    - \.\.//
+    - /\./
+    - \.\.%2F
+    - "%2E%2E/"
+    - "%2E%2E%2F"
+    - \.%2E/
+    status_code: []
+    ua: ''
+
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: false
+    matching: contains
+    method: ''
+    name: "PHP伪协议文件读取"
+    rule:
+    - php://input
+    - data://text/plain
+    - phar://
+    - zip://
+    - php://filter/
+    status_code: []
+    ua: ''
+
+- family: cmd
+  name: "命令执行"
+  poc:
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: false
+    matching: regex
+    method: ''
+    name: "SSTI模板注入"
+    rule:
+    - =\$\{\d+\*\d+\}
+    - =\$\{\d+\-\d+\}
+    status_code: []
+    ua: ''
+
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: false
+    matching: regex
+    method: ''
+    name: "常规命令执行"
+    rule:
+    - ".*?=.*&&[^=].*?[a-z]+.*?"
+    - "=.*?&.*?whoami.*?"
+    - =.*?;.*?[a-z]+.*?
+    - =.*?\|\|.*?[a-z]+.*?
+    - =.*?\|.*?[a-z]+.*?
+    - ping.*\..*\.
+    - cat.*?/etc/passwd
+    - base64.*-d
+    - Runtime\.getRuntime
+    status_code: []
+    ua: ''
+
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: true
+    matching: regex
+    method: ''
+    name: "执行远程代码"
+    rule:
+    - wget.*http.*
+    - curl.*http.*
+    status_code: []
+    ua: ''
+
+  - iscase: true
+    isfall: false
+    issuccess: false
+    ismatchua: true
+    matching: contains
+    method: ''
+    name: "DNSlog测试"
+    rule:
+    - ceye.io
+    - dnslog.cn
+    - dnslog.link
+    status_code: []
+    ua: ''
+
+- family: deserialize
+  name: "反序列化攻击"
+  poc:
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: true
+    matching: regex
+    method: ''
+    name: "Java反序列化漏洞攻击"
+    rule:
+    - \$\{.*\$\{\}.*://.*\}
+    - \$\{.*://.*\}
+    - ldap://
+    - rmi://
+    status_code: []
+    ua: ''
+
+- family: suspicious_file
+  name: "可疑文件"
+  poc:
+  - iscase: false
+    isfall: true
+    issuccess: true
+    ismatchua: false
+    matching: regex
+    method: POST
+    name: "疑似webshell文件访问"
+    rule:
+    - shell\..*
+    - .*hack\..*
+    - backdoor\..*
+    status_code: [200]
+    ua: ''
+
+- family: method
+  name: "可疑请求方式"
+  poc:
+  - iscase: false
+    isfall: false
+    issuccess: true
+    ismatchua: false
+    matching: regex
+    method: HEAD
+    name: "HEAD请求方式"
+    rule: []
+    status_code: [200]
+    ua: ''
+  - iscase: false
+    isfall: true
+    issuccess: true
+    ismatchua: false
+    matching: regex
+    method: PUT
+    name: "PUT请求方式"
+    rule: []
+    status_code: [200]
+    ua: ''
+
+- family: user_agent
+  name: "可疑的User-Agent头"
+  poc:
+  - iscase: false
+    isfall: false
+    issuccess: true
+    ismatchua: true
+    matching: regex
+    method: ''
+    name: "python程序扫描"
+    rule: []
+    status_code: [200]
+    ua: ".*python.*"
+
+  - iscase: false
+    isfall: false
+    issuccess: true
+    ismatchua: true
+    matching: regex
+    method: ''
+    name: "java程序扫描"
+    rule: []
+    status_code: [200]
+    ua: ".*java.*"
+
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: true
+    matching: regex
+    method: ''
+    name: "sqlmapSQL注入利用"
+    rule: []
+    status_code: []
+    ua: sqlmap\.org
+
+  - iscase: false
+    isfall: true
+    issuccess: true
+    ismatchua: true
+    matching: regex
+    method: ''
+    name: "蚁剑连接webshell"
+    rule: []
+    status_code: []
+    ua: "AntSword"
+
+- family: sensitive_file
+  name: "敏感文件"
+  poc:
+  - iscase: false
+    isfall: false
+    issuccess: true
+    ismatchua: false
+    matching: regex
+    method: ''
+    name: "目录扫描"
+    rule: 
+    - /\.\.;/
+    - \.htaccess
+    - \.htpasswd
+    - \.admin/
+    - \.build
+    - \..*~
+    - .*\.inc
+    - \.git
+    - \.svn
+    - \.DS_store
+    - WEB-INF/web.xml$
+    status_code: [200]
+    ua: ''
+
+  - iscase: false
+    isfall: false
+    issuccess: true
+    ismatchua: false
+    matching: regex
+    method: ''
+    name: "web压缩包扫描"
+    rule: 
+    - /www\.zip
+    - /root\..*
+    - /backup\..*
+    - /data\..*
+    - /wwwroot\..*
+    - /.*\.zip$
+    - /.*\.gz$
+    - /.*\.7z$
+    - /.*\.rar$
+    - /.*\.bz$
+    - /.*\.sql$
+    - /.*~$
+    status_code: [200]
+    ua: ''
+
+  - iscase: false
+    isfall: false
+    issuccess: true
+    ismatchua: false
+    matching: contains
+    method: ''
+    name: "敏感目录"
+    rule: 
+    - /phpinfo.php
+    - /info.php
+    - /druid/index.html
+    - /editor/
+    - /zentao/
+    - /nacos/
+    - /minio/
+    - /users/sign_in
+    - /admin/login/?next=/admin/
+    - /WebReport/ReportServer
+    - /console/login/LoginForm.jsp
+    status_code: [200]
+    ua: ''
+
+  - iscase: false
+    isfall: false
+    issuccess: true
+    ismatchua: false
+    matching: regex
+    method: ''
+    name: "调试页面"
+    rule: 
+    - debug\..*
+    status_code: [200]
+    ua: ''
+
+  - iscase: true
+    isfall: false
+    issuccess: true
+    ismatchua: false
+    matching: regex
+    method: ''
+    name: "spring目录扫描"
+    rule: 
+    - .*/api-docs$
+    - .*/swagger-ui.html$
+    - .*/swagger$
+    - .*/swagger.json$
+    - .*/swagger/index.html$
+    - .*/swagger-ui/index.html$
+    - .*/actuator$
+    - .*/dump$
+    - .*/env$
+    - .*/health$
+    - .*/heapdump$
+    - .*/info$
+    - .*/jolokia$
+    - .*/metrics$
+    - .*/refresh$
+    - .*/threaddump$
+    - .*/actuator/env$
+    - .*/env$
+    status_code: [200]
+    ua: ''
+
+  - iscase: false
+    isfall: false
+    issuccess: true
+    ismatchua: false
+    matching: regex
+    method: ''
+    name: "phpmyadmin目录"
+    rule: 
+    - /phpmyadmin.*
+    status_code: [200]
+    ua: ''
+
+- family: known_vulnerability_attacks
+  name: "已知漏洞攻击"
+  poc:
+  - iscase: true
+    isfall: false
+    issuccess: true
+    ismatchua: false
+    matching: contains
+    method: POST
+    name: "海康威视fastjson"
+    rule: 
+    - /bic/ssoService/v1/applyCT
+    status_code: [200,500]
+    ua: ''
+    
+  - iscase: false
+    isfall: false
+    issuccess: false
+    ismatchua: false
+    matching: regex
+    method: 
+    name: "thinkPHP漏洞攻击"
+    rule: 
+    - /index.php\?\s=/.*?/.*?/\$\{.*\} # thinkphp 2.x-RCE x Getshell
+    - /index.php\?ids\[.*,updatexml(.*,.*,.*)\]=.* # 5.0.9 SQL注入
+    - \?s=index/\\think\\Request/input&filter\[\]=.*?&data=.*?
+    - \?s=index/\\think\\view\\driver\\Php/display&content=.*?
+    - \?s=index/\\think\\Container/invokefunction&function=.*?&vars\[0\]=.*?&vars\[1\]\[\]=.*
+    - \?s=index/\\think\\app/invokefunction&function=
+    - /index/index/index\?username\[0\]=point&username\[1\]=.*&username\[2\]=.*\^&username\[3\]=.*
+    - /index/index/index\?username=.*
+    - /\?s=index/\\think\\app/invokefunction&function=.*?&vars\[0\]=.*?&vars\[1\]\[\]=.*? # 5.0.22/5.1.29-RCE
+    - /index.php\?s=captcha # 5.0.23-RCE
+    status_code: []
+    ua: ''
