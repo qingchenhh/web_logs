@@ -13,9 +13,9 @@ rules:
     # - order.*by.*
     - information_schema\.
     - floor.*\(.*rand\(\).*\)
-    - updatexml\(.*,.*,\)
+    - updatexml\(.*,.*\)
     - union.*select
-    - extractvalue\(.*,.*,.*\)
+    - extractvalue\(.*,.*\)
     - ascii\(.*\)
     - database\(\)
     - user\(\)
@@ -91,7 +91,7 @@ rules:
     - "%2E%2E%2F"
     - \.%2E/
     - \.%2e%2f
-    - %2e\.%2f
+    - "%2e.%2f"
     - file://
     status_code: []
     ua: ''
@@ -169,9 +169,9 @@ rules:
     method: ''
     name: "DNSlog测试"
     rule:
-    - ceye.io
-    - dnslog.cn
-    - dnslog.link
+    - .ceye.io
+    - .dnslog.cn
+    - .dnslog.link
     status_code: []
     ua: ''
 
