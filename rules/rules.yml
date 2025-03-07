@@ -34,6 +34,7 @@ rules:
     - \'.*and\.*#.*'
     - \'.*or\.*#.*'
     - select.*from
+    - sleep\([0-9]\)
     status_code: []
     ua: ''
 
@@ -89,6 +90,9 @@ rules:
     - "%2E%2E/"
     - "%2E%2E%2F"
     - \.%2E/
+    - \.%2e%2f
+    - %2e\.%2f
+    - file://
     status_code: []
     ua: ''
 
@@ -186,6 +190,8 @@ rules:
     - \$\{.*://.*\}
     - ldap://
     - rmi://
+    - rO0AB
+    - aced
     status_code: []
     ua: ''
 
@@ -321,7 +327,6 @@ rules:
     - /.*\.rar$
     - /.*\.bz$
     - /.*\.sql$
-    - /.*~$
     status_code: [200]
     ua: ''
 
@@ -356,6 +361,8 @@ rules:
     name: "调试页面"
     rule: 
     - debug\..*
+    - demo\..*
+    - test\..*
     status_code: [200]
     ua: ''
 
